@@ -2,143 +2,159 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Generator tomżsamości</title>
+    <title>Generator Tożsamości</title>
     <style>
-        :root { --primary: #10b981; --secondary: #0ea5e9; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
+        :root { --primary: #10b981; --secondary: #3b82f6; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; justify-content: center; }
-        .box { background: var(--card); padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); width: 100%; max-width: 800px; border: 1px solid #334155; }
+        .box { background: var(--card); padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); width: 100%; max-width: 850px; border: 1px solid #334155; }
         h2 { margin-top: 0; color: var(--primary); font-size: 1.2rem; text-transform: uppercase; border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 20px; }
+        .profile-section { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: #0f172a; padding: 20px; border-radius: 16px; border-left: 5px solid var(--primary); }
+        .avatar { font-size: 3rem; background: #1e293b; padding: 10px; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .item { background: #0f172a; padding: 15px; border-radius: 16px; border: 1px solid #334155; }
+        .item { background: #0f172a; padding: 12px 15px; border-radius: 12px; border: 1px solid #334155; position: relative; cursor: pointer; transition: 0.2s; }
+        .item:hover { border-color: var(--secondary); background: #161e31; }
         .label { font-size: 0.65rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 4px; }
-        .val { font-family: 'Courier New', monospace; font-size: 1rem; color: #38bdf8; font-weight: bold; word-break: break-all; }
+        .val { font-family: 'Courier New', monospace; font-size: 1rem; color: #38bdf8; font-weight: bold; }
         .full { grid-column: span 2; }
-        button { width: 100%; padding: 18px; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: 800; font-size: 1rem; margin-top: 20px; }
-        button:hover { filter: brightness(1.1); transform: translateY(-1px); }
-        .bank-tag { font-size: 0.75rem; color: #fbbf24; font-weight: bold; margin-top: 5px; display: block; }
+        button.main-btn { width: 100%; padding: 18px; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 14px; cursor: pointer; font-weight: 800; font-size: 1.1rem; margin-top: 20px; }
+        .bank-tag { font-size: 0.75rem; color: #fbbf24; font-weight: bold; }
+        .copy-hint { font-size: 0.6rem; color: var(--primary); position: absolute; right: 10px; top: 10px; opacity: 0; }
+        .item:hover .copy-hint { opacity: 1; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>System Generowania Tożsamości i Systemów Bankowych</h2>
-    <div class="grid">
-        <div class="item"><span class="label">PESEL</span><span id="g-pesel" class="val">---</span></div>
-        <div class="item"><span class="label">Dowód Osobisty</span><span id="g-id" class="val">---</span></div>
-        <div class="item"><span class="label">NIP</span><span id="g-nip" class="val">---</span></div>
-        <div class="item"><span class="label">KRS</span><span id="g-krs" class="val">---</span></div>
-        <div class="item"><span class="label">REGON 9</span><span id="g-regon9" class="val">---</span></div>
-        <div class="item"><span class="label">REGON 14</span><span id="g-regon14" class="val">---</span></div>
-        <div class="item full">
-            <span class="label">Rachunek IBAN (PL + 26 cyfr)</span>
-            <span id="g-iban" class="val">---</span>
-            <span id="bank-name" class="bank-tag">Kliknij Generuj...</span>
+    <h2>System Personalizacji Danych Osobowych</h2>
+    
+    <div class="profile-section">
+        <div id="g-avatar" class="avatar">👤</div>
+        <div>
+            <div id="g-full-name" style="font-size: 1.5rem; font-weight: 800; color: #fff;">Wciśnij Generuj</div>
+            <div id="g-gender-label" style="font-size: 0.9rem; color: #94a3b8;">Płeć: --- | Narodowość: Polska</div>
         </div>
-        <div class="item full"><span class="label">Mikrorachunek Podatkowy (PESEL)</span><span id="g-tax-p" class="val">---</span></div>
-        <div class="item full"><span class="label">Mikrorachunek Podatkowy (NIP)</span><span id="g-tax-n" class="val">---</span></div>
     </div>
-    <button onclick="generateAll()">GENERUJ NOWY KOMPLET DANYCH</button>
+
+    <div class="grid">
+        <div class="item" onclick="copy(this)"><span class="label">PESEL</span><span id="g-pesel" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
+        <div class="item" onclick="copy(this)"><span class="label">Dowód Osobisty</span><span id="g-id" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
+        <div class="item" onclick="copy(this)"><span class="label">NIP</span><span id="g-nip" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
+        <div class="item" onclick="copy(this)"><span class="label">KRS</span><span id="g-krs" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
+        <div class="item" onclick="copy(this)"><span class="label">REGON 9</span><span id="g-regon9" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
+        <div class="item" onclick="copy(this)"><span class="label">REGON 14</span><span id="g-regon14" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
+        
+        <div class="item full" onclick="copy(this)">
+            <span class="label">Rachunek IBAN (PL + 26 cyfr) - <span id="bank-name" class="bank-tag">...</span></span>
+            <span id="g-iban" class="val">---</span>
+            <span class="copy-hint">KOPIUJ</span>
+        </div>
+        
+        <div class="item full" onclick="copy(this)"><span class="label">Mikrorachunek Podatkowy (Indywidualny)</span><span id="g-tax-p" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
+    </div>
+    
+    <button class="main-btn" onclick="generateIdentity()">GENERUJ NOWĄ TOŻSAMOŚĆ</button>
 </div>
 
 <script>
-    const bankDatabase = [
-        {c: "1940", n: "Credit Agricole Bank Polska S.A."},
-        {c: "2410", n: "ZEN.COM (Digital Money)"},
-        {c: "1020", n: "PKO BP SA"},
-        {c: "1050", n: "ING Bank Śląski S.A."},
-        {c: "1140", n: "mBank S.A."},
-        {c: "1090", n: "Santander Bank Polska SA"},
-        {c: "1240", n: "Pekao SA"},
-        {c: "2490", n: "Alior Bank S.A."},
-        {c: "1160", n: "Bank Millennium S.A."},
-        {c: "2120", n: "Santander Consumer Bank S.A."},
-        {c: "1540", n: "BOŚ Bank"},
-        {c: "1320", n: "Bank Pocztowy S.A."},
-        {c: "1870", n: "Nest Bank S.A."},
-        {c: "1030", n: "Bank Handlowy (Citi)"},
-        {c: "1610", n: "SGB-Bank S.A. (Spółdzielcza Grupa Bankowa)"},
-        {c: "2030", n: "BNP Paribas Bank Polska SA"},
-        {c: "1010", n: "Narodowy Bank Polski"},
-        {c: "1930", n: "Bank Polskiej Spółdzielczości S.A."},
-        {c: "2160", n: "Toyota Bank Polska S.A."},
-        {c: "1680", n: "Plus Bank S.A."}
-    ];
+    const data = {
+        namesM: ["Adam", "Piotr", "Marek", "Łukasz", "Tomasz", "Jan", "Krzysztof", "Michał", "Paweł", "Jakub"],
+        namesF: ["Anna", "Katarzyna", "Małgorzata", "Agnieszka", "Barbara", "Ewa", "Magdalena", "Zofia", "Maria", "Karolina"],
+        surnames: ["Nowak", "Kowalski", "Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Zieliński", "Szymański", "Woźniak", "Dąbrowski"],
+        banks: [
+            {c: "1940", n: "Credit Agricole (O/Centralny)"}, {c: "1940", n: "Credit Agricole (O/Warszawa)"},
+            {c: "2410", n: "ZEN.COM (Digital Banking)"}, {c: "2410", n: "ZEN Payments UAB"},
+            {c: "1020", n: "PKO Bank Polski"}, {c: "1050", n: "ING Bank Śląski"},
+            {c: "1140", n: "mBank S.A."}, {c: "1090", n: "Santander Bank Polska"},
+            {c: "1240", n: "Pekao SA"}, {c: "2490", n: "Alior Bank"},
+            {c: "1160", n: "Bank Millennium"}
+        ]
+    };
 
-    function calcIbanControl(bban) {
-        const valueToMod = bban + "252100"; 
-        const remainder = BigInt(valueToMod) % 97n;
-        return (98n - remainder).toString().padStart(2, '0');
+    const bigMod97 = (s) => BigInt(s) % 97n;
+
+    function generateIdentity() {
+        const isFemale = Math.random() > 0.5;
+        const name = isFemale ? data.namesF[Math.floor(Math.random()*10)] : data.namesM[Math.floor(Math.random()*10)];
+        let surname = data.surnames[Math.floor(Math.random()*10)];
+        
+        // Korekta żeńskich końcówek nazwisk
+        if(isFemale && surname.endsWith('ski')) surname = surname.replace('ski', 'ska');
+        if(isFemale && surname.endsWith('cki')) surname = surname.replace('cki', 'cka');
+
+        const pesel = genPESEL(isFemale);
+        const nip = genNIP();
+        const regons = genRegons();
+        const bank = data.banks[Math.floor(Math.random() * data.banks.length)];
+        
+        // UI Update
+        document.getElementById('g-full-name').innerText = `${name} ${surname}`;
+        document.getElementById('g-avatar').innerText = isFemale ? "👩" : "👨";
+        document.getElementById('g-gender-label').innerText = `Płeć: ${isFemale ? 'Kobieta' : 'Mężczyzna'} | Narodowość: Polska`;
+        document.getElementById('g-pesel').innerText = pesel;
+        document.getElementById('g-nip').innerText = nip;
+        document.getElementById('g-regon9').innerText = regons.r9;
+        document.getElementById('g-regon14').innerText = regons.r14;
+        document.getElementById('g-id').innerText = genID();
+        document.getElementById('g-krs').innerText = "0000" + Math.floor(100000 + Math.random()*899999);
+        
+        const bban = bank.c + Math.floor(1001 + Math.random()*8999) + Math.random().toString().slice(2, 18).padEnd(16, '0');
+        const iban = "PL" + (98n - bigMod97(bban + "252100")).toString().padStart(2, '0') + bban;
+        document.getElementById('g-iban').innerText = iban.replace(/(.{4})/g, '$1 ');
+        document.getElementById('bank-name').innerText = bank.n;
+
+        const taxBBAN = "101000712221" + pesel.padStart(13, '0');
+        const taxIban = "PL" + (98n - bigMod97(taxBBAN + "252100")).toString().padStart(2, '0') + taxBBAN;
+        document.getElementById('g-tax-p').innerText = taxIban.replace(/(.{4})/g, '$1 ');
     }
 
-    function genPESEL() {
-        const year = 1950 + Math.floor(Math.random() * 75);
-        let month = 1 + Math.floor(Math.random() * 12);
-        const day = 1 + Math.floor(Math.random() * 28);
-        if (year >= 2000) month += 20;
-        const base = [Math.floor((year%100)/10), year%10, Math.floor(month/10), month%10, Math.floor(day/10), day%10, ...Array.from({length: 4}, () => Math.floor(Math.random()*10))];
+    function genPESEL(isFemale) {
+        const y = 1960 + Math.floor(Math.random()*50);
+        let m = 1 + Math.floor(Math.random()*12);
+        const d = 1 + Math.floor(Math.random()*28);
+        if(y >= 2000) m += 20;
+        const pPłeć = isFemale ? [0,2,4,6,8][Math.floor(Math.random()*5)] : [1,3,5,7,9][Math.floor(Math.random()*5)];
+        const base = [Math.floor((y%100)/10), y%10, Math.floor(m/10), m%10, Math.floor(d/10), d%10, Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), pPłeć];
         const w = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
-        const sum = base.reduce((a, v, i) => a + v * w[i], 0);
-        base.push((10 - (sum % 10)) % 10);
+        const s = base.reduce((a,v,i) => a + v*w[i], 0);
+        base.push((10 - (s % 10)) % 10);
         return base.join('');
     }
 
     function genNIP() {
         const w = [6, 5, 7, 2, 3, 4, 5, 6, 7];
         while(true) {
-            const d = Array.from({length: 9}, () => Math.floor(Math.random() * 10));
-            const check = d.reduce((a, v, i) => a + v * w[i], 0) % 11;
-            if (check !== 10) return d.join('') + check;
+            const d = Array.from({length: 9}, () => Math.floor(Math.random()*10));
+            const c = d.reduce((a,v,i) => a + v*w[i], 0) % 11;
+            if(c !== 10) return d.join('') + c;
         }
     }
 
-    function genRegonSet() {
-        const d9 = Array.from({length: 8}, () => Math.floor(Math.random() * 10));
+    function genRegons() {
+        const d9 = Array.from({length: 8}, () => Math.floor(Math.random()*10));
         const w9 = [8, 9, 2, 3, 4, 5, 6, 7];
-        let c9 = d9.reduce((a, v, i) => a + v * w9[i], 0) % 11; d9.push(c9 === 10 ? 0 : c9);
-        const r9 = d9.join('');
-        const d14 = [...d9, ...Array.from({length: 4}, () => Math.floor(Math.random() * 10))];
+        let c9 = d9.reduce((a,v,i) => a + v*w9[i], 0) % 11; d9.push(c9===10?0:c9);
+        const d14 = [...d9, ...Array.from({length: 4}, () => Math.floor(Math.random()*10))];
         const w14 = [2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8];
-        let c14 = d14.reduce((a, v, i) => a + v * w14[i], 0) % 11; d14.push(c14 === 10 ? 0 : c14);
-        return { r9, r14: d14.join('') };
+        let c14 = d14.reduce((a,v,i) => a + v*w14[i], 0) % 11; d14.push(c14===10?0:c14);
+        return { r9: d9.join(''), r14: d14.join('') };
     }
 
     function genID() {
         const L = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const l = [L[Math.floor(Math.random()*26)], L[Math.floor(Math.random()*26)], L[Math.floor(Math.random()*26)]];
         const d = Array.from({length: 5}, () => Math.floor(Math.random()*10));
-        const map = (c) => c.charCodeAt(0) - 55;
         const w = [7, 3, 1, 7, 3, 1, 7, 3];
-        const val = [...l.map(map), ...d];
-        const sum = val.reduce((a, v, i) => a + v * w[i], 0);
-        return l.join('') + (sum % 10) + d.join('');
+        const v = [...l.map(x => x.charCodeAt(0)-55), ...d];
+        const s = v.reduce((a,v,i) => a + v*w[i], 0);
+        return l.join('') + (s % 10) + d.join('');
     }
 
-    function generateAll() {
-        const pesel = genPESEL();
-        const nip = genNIP();
-        const regons = genRegonSet();
-        const bank = bankDatabase[Math.floor(Math.random() * bankDatabase.length)];
-        
-        // BBAN: BankCode(4) + Oddział(4) + Kontrola(0) + Numer(15) = 24 cyfry
-        const branch = Math.floor(1001 + Math.random() * 8999).toString();
-        const account = Array.from({length: 16}, () => Math.floor(Math.random() * 10)).join('');
-        const bban = (bank.c + branch + account).substring(0, 24);
-        const iban = "PL" + calcIbanControl(bban) + bban;
-
-        // Mikrorachunek: 10100071 + 222 + typ + ID
-        const txP_BBAN = "101000712221" + pesel.padStart(13, '0');
-        const txN_BBAN = "101000712222" + nip.padStart(13, '0');
-
-        document.getElementById('g-pesel').innerText = pesel;
-        document.getElementById('g-id').innerText = genID();
-        document.getElementById('g-nip').innerText = nip;
-        document.getElementById('g-krs').innerText = "0000" + Math.floor(100000 + Math.random()*899999).toString().padStart(6, '0');
-        document.getElementById('g-regon9').innerText = regons.r9;
-        document.getElementById('g-regon14').innerText = regons.r14;
-        document.getElementById('g-iban').innerText = iban.replace(/(.{4})/g, '$1 ');
-        document.getElementById('bank-name').innerText = "Bank: " + bank.n;
-        document.getElementById('g-tax-p').innerText = "PL" + calcIbanControl(txP_BBAN) + txP_BBAN;
-        document.getElementById('g-tax-n').innerText = "PL" + calcIbanControl(txN_BBAN) + txN_BBAN;
+    function copy(el) {
+        const text = el.querySelector('.val').innerText.replace(/\s/g, '');
+        navigator.clipboard.writeText(text);
+        const hint = el.querySelector('.copy-hint');
+        hint.innerText = "SKOPIOWANO!";
+        setTimeout(() => hint.innerText = "KOPIUJ", 1000);
     }
 </script>
 </body>
