@@ -174,6 +174,61 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script>
+        function saveCookieConsent(type) {
+    // Zapisujemy wybór w localStorage (na rok)
+    const consent = {
+        accepted: true,
+        type: type,
+        date: new Date().toISOString()
+    };
+    localStorage.setItem('cookieConsent', JSON.stringify(consent));
+    
+    // Jeśli użytkownik zaakceptował "all", tutaj możesz odpalić skrypty śledzące
+    if (type === 'all') {
+        initTracking(); 
+    }
+    
+    // Ukrywamy baner
+    document.getElementById('cookie-consent-banner').style.display = 'none';
+    document.getElementById('cookie-overlay').style.display = 'none';
+}
+
+function checkCookieConsent() {
+    const consent = localStorage.getItem('cookieConsent');
+    if (!consent) {
+        document.getElementById('cookie-consent-banner').style.display = 'block';
+        document.getElementById('cookie-overlay').style.display = 'block';
+    } else {
+        const parsed = JSON.parse(consent);
+        if (parsed.type === 'all') initTracking();
+    }
+}
+
+function initTracking() {
+    console.log("Inicjalizacja śledzenia ruchu (Google Analytics itp.)...");
+    // Tutaj wklej swój właściwy kod śledzący
+}
+
+// Uruchomienie sprawdzania po załadowaniu strony
+window.addEventListener('DOMContentLoaded', checkCookieConsent);
+    <div id="cookie-overlay" class="cookie-overlay"></div>
+<div id="cookie-consent-banner" class="cookie-container">
+    <div class="cookie-content">
+        <div class="cookie-header">
+            <span class="cookie-icon">🍪</span>
+            <h3>Dbamy o Twoją prywatność</h3>
+        </div>
+        <p>
+            Używamy plików cookies, aby analizować ruch na stronie i poprawiać komfort użytkowania. 
+            Możesz zaakceptować wszystkie ciasteczka, odrzucić te opcjonalne lub dostosować swoje wybory. 
+            Więcej informacji znajdziesz w naszej <a href="polityka.html">Polityce Prywatności</a>.
+        </p>
+        <div class="cookie-buttons">
+            <button onclick="saveCookieConsent('essential')" class="btn-cookie secondary">Tylko niezbędne</button>
+            <button onclick="saveCookieConsent('all')" class="btn-cookie primary">Akceptuję wszystkie</button>
+        </div>
+    </div>
+</div>
     const imionaM = ["Jan", "Andrzej", "Piotr", "Krzysztof", "Stanisław", "Tomasz", "Paweł", "Józef", "Marcin", "Marek", "Michał", "Grzegorz", "Jerzy", "Tadeusz", "Adam", "Łukasz", "Zbigniew", "Ryszard", "Dariusz", "Henryk", "Mariusz", "Kazimierz", "Wojciech", "Robert", "Mateusz", "Marian", "Rafał", "Jacek", "Janusz", "Mirosław"];
     const imionaZ = ["Anna", "Maria", "Katarzyna", "Małgorzata", "Agnieszka", "Krystyna", "Barbara", "Ewa", "Elżbieta", "Zofia", "Janina", "Teresa", "Joanna", "Magdalena", "Monika", "Jadwiga", "Danuta", "Irena", "Halina", "Helena", "Beata", "Aleksandra", "Marta", "Dorota", "Marianna", "Grażyna", "Jolanta", "Stanisława", "Iwona", "Urszula"];
     const nazwiska = ["Nowak", "Kowalski", "Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Lewandowski", "Zieliński", "Szymański", "Woźniak", "Dąbrowski", "Kozłowski", "Jankowski", "Mazur", "Wojciechowski", "Kwiatkowski", "Krawczyk", "Kaczmarek", "Piotrowski", "Grabowski", "Zając", "Pawłowski", "Michalski", "Król", "Wieczorek", "Jabłoński", "Wróbel", "Nowakowski", "Majewski", "Olszewski"];
@@ -276,61 +331,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         navigator.clipboard.writeText(val);
         const h = el.querySelector('.copy-hint'); h.innerText = "SKOPIOWANO"; setTimeout(()=>h.innerText="KOPIUJ", 1000);
     }
-    function saveCookieConsent(type) {
-    // Zapisujemy wybór w localStorage (na rok)
-    const consent = {
-        accepted: true,
-        type: type,
-        date: new Date().toISOString()
-    };
-    localStorage.setItem('cookieConsent', JSON.stringify(consent));
-    
-    // Jeśli użytkownik zaakceptował "all", tutaj możesz odpalić skrypty śledzące
-    if (type === 'all') {
-        initTracking(); 
-    }
-    
-    // Ukrywamy baner
-    document.getElementById('cookie-consent-banner').style.display = 'none';
-    document.getElementById('cookie-overlay').style.display = 'none';
-}
-
-function checkCookieConsent() {
-    const consent = localStorage.getItem('cookieConsent');
-    if (!consent) {
-        document.getElementById('cookie-consent-banner').style.display = 'block';
-        document.getElementById('cookie-overlay').style.display = 'block';
-    } else {
-        const parsed = JSON.parse(consent);
-        if (parsed.type === 'all') initTracking();
-    }
-}
-
-function initTracking() {
-    console.log("Inicjalizacja śledzenia ruchu (Google Analytics itp.)...");
-    // Tutaj wklej swój właściwy kod śledzący
-}
-
-// Uruchomienie sprawdzania po załadowaniu strony
-window.addEventListener('DOMContentLoaded', checkCookieConsent);
-    <div id="cookie-overlay" class="cookie-overlay"></div>
-<div id="cookie-consent-banner" class="cookie-container">
-    <div class="cookie-content">
-        <div class="cookie-header">
-            <span class="cookie-icon">🍪</span>
-            <h3>Dbamy o Twoją prywatność</h3>
-        </div>
-        <p>
-            Używamy plików cookies, aby analizować ruch na stronie i poprawiać komfort użytkowania. 
-            Możesz zaakceptować wszystkie ciasteczka, odrzucić te opcjonalne lub dostosować swoje wybory. 
-            Więcej informacji znajdziesz w naszej <a href="polityka.html">Polityce Prywatności</a>.
-        </p>
-        <div class="cookie-buttons">
-            <button onclick="saveCookieConsent('essential')" class="btn-cookie secondary">Tylko niezbędne</button>
-            <button onclick="saveCookieConsent('all')" class="btn-cookie primary">Akceptuję wszystkie</button>
-        </div>
-    </div>
-</div>
 </script>
 </body>
 </html>
