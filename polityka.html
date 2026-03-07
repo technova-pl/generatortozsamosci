@@ -2,15 +2,33 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <title>Polityka Prywatności - Generator Tożsamości</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; color: #334155; padding: 40px; max-width: 800px; margin: auto; }
-        h1 { color: #10b981; }
+        :root { --primary: #10b981; --secondary: #3b82f6; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 40px 20px; line-height: 1.6; display: flex; justify-content: center; }
+        .container { background: var(--card); padding: 40px; border-radius: 24px; max-width: 800px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        h1 { color: var(--primary); border-bottom: 1px solid #334155; padding-bottom: 10px; font-size: 1.8rem; }
+        h2 { color: var(--secondary); margin-top: 25px; font-size: 1.1rem; text-transform: uppercase; }
+        p { color: #94a3b8; font-size: 0.95rem; }
+        .back-btn { display: inline-block; margin-top: 30px; padding: 12px 24px; background: var(--secondary); color: white; text-decoration: none; border-radius: 12px; font-weight: bold; transition: 0.3s; }
+        .back-btn:hover { opacity: 0.8; transform: translateY(-2px); }
     </style>
 </head>
 <body>
-    <h1>Polityka Prywatności</h1>
-    <p><strong>1. Przetwarzanie danych:</strong> Strona nie zbiera żadnych danych o użytkowniku. Wszystkie skrypty działają lokalnie w przeglądarce.</p>
-    <p><strong>2. Pliki Cookies:</strong> Serwis nie wykorzystuje ciasteczek ani technologii śledzących.</p>
-    <p><strong>3. Logi serwera:</strong> Adresy IP użytkowników nie są logowane ani przechowywane.</p>
+    <div class="container">
+        <h1>Polityka Prywatności</h1>
+        <p>Niniejszy dokument określa zasady przetwarzania danych oraz wykorzystywania plików cookies w serwisie.</p>
+        
+        <h2>1. Dane Analityczne</h2>
+        <p>W celu poprawy jakości działania generatora, serwis korzysta z narzędzi analitycznych, które zbierają anonimowe informacje o Twojej wizycie (np. czas trwania sesji, rodzaj przeglądarki, odwiedzone podstrony). Dane te nie pozwalają na Twoją identyfikację.</p>
+        
+        <h2>2. Pliki Cookies (Ciasteczka)</h2>
+        <p>Serwis wykorzystuje cookies techniczne (niezbędne do działania strony) oraz analityczne (pomagające zrozumieć ruch na stronie). Możesz zarządzać ciasteczkami w ustawieniach swojej przeglądarki.</p>
+        
+        <h2>3. Dane Generowane</h2>
+        <p>Wszystkie dane generowane przez narzędzia (PESEL, NIP itp.) powstają lokalnie w Twojej przeglądarce i nigdy nie opuszczają Twojego urządzenia.</p>
+        
+        <a href="index.html" class="back-btn">← Powrót do generatora</a>
+    </div>
 </body>
 </html>
