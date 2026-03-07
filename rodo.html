@@ -2,31 +2,51 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>RODO - Obowiązek Informacyjny</title>
+    <title>Obowiązek Informacyjny RODO</title>
     <style>
         :root { --primary: #10b981; --secondary: #3b82f6; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 40px 20px; line-height: 1.6; display: flex; justify-content: center; }
-        .container { background: var(--card); padding: 40px; border-radius: 24px; max-width: 800px; border: 1px solid #334155; }
+        .container { background: var(--card); padding: 40px; border-radius: 24px; max-width: 850px; border: 1px solid #334155; }
         h1 { color: var(--primary); border-bottom: 1px solid #334155; padding-bottom: 10px; font-size: 1.8rem; }
-        .info-box { background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--primary); padding: 15px; color: #cbd5e1; margin: 20px 0; }
-        p { color: #94a3b8; }
-        strong { color: var(--text); }
+        .rodo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        .rodo-item { background: #0f172a; padding: 20px; border-radius: 16px; border: 1px solid #1e293b; }
+        .rodo-item h3 { color: var(--secondary); margin-top: 0; font-size: 1rem; }
+        .rodo-item p { font-size: 0.85rem; margin-bottom: 0; }
         .back-btn { display: inline-block; margin-top: 30px; padding: 12px 24px; background: var(--secondary); color: white; text-decoration: none; border-radius: 12px; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Obowiązek Informacyjny RODO</h1>
-        
-        <div class="info-box">
-            <strong>Brak zbierania danych osobowych:</strong> Generator nie wymaga rejestracji i nie prosi o podanie Twoich danych osobowych.
+        <h1>RODO - Twoje Prawa</h1>
+        <p>Działając zgodnie z art. 13 ust. 1 i 2 Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO), informujemy o zasadach przetwarzania danych:</p>
+
+        <div class="rodo-grid">
+            <div class="rodo-item">
+                <h3>Administrator</h3>
+                <p>Właściciel serwisu [TechNova GitHub]. Kontakt: [iod.technova@proton.me].</p>
+            </div>
+            <div class="rodo-item">
+                <h3>Cel przetwarzania</h3>
+                <p>Umożliwienie korzystania z darmowego narzędzia oraz analiza statystyczna ruchu (Art. 6 ust. 1 lit. f RODO).</p>
+            </div>
+            <div class="rodo-item">
+                <h3>Odbiorcy danych</h3>
+                <p>Dostawcy narzędzi analitycznych (Google) oraz hostingu. Dane są zanonimizowane.</p>
+            </div>
+            <div class="rodo-item">
+                <h3>Okres przechowywania</h3>
+                <p>Dane analityczne są przechowywane przez okres 14-26 miesięcy, po czym są usuwane.</p>
+            </div>
         </div>
 
-        <p>W związku z korzystaniem z narzędzi śledzenia ruchu informujemy:</p>
-        <p><strong>1. Administrator:</strong> Właściciel serwisu [TechNova PL / Kontakt: iod.technova@proton.me].</p>
-        <p><strong>2. Przetwarzanie:</strong> Twoje dane (adres IP, lokalizacja przybliżona) są przetwarzane w sposób zanonimizowany przez zewnętrznych dostawców usług analitycznych (np. Google LLC).</p>
-        <p><strong>3. Cel:</strong> Statystyki odwiedzin oraz badanie popularności poszczególnych funkcji generatora.</p>
-        
+        <h2>Twoje Prawa:</h2>
+        <ul>
+            <li>Prawo dostępu do swoich danych oraz otrzymania ich kopii.</li>
+            <li>Prawo do sprostowania (poprawiania) swoich danych.</li>
+            <li>Prawo do wniesienia sprzeciwu wobec profilowania i śledzenia analitycznego.</li>
+            <li>Prawo do wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (PUODO).</li>
+        </ul>
+
         <a href="index.html" class="back-btn">← Powrót do generatora</a>
     </div>
 </body>
