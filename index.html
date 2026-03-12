@@ -146,6 +146,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     ];
     const bigMod97 = (s) => BigInt(s) % 97n;
 
+const BAZA_TABLIC = {
+    "W": { woj: "Mazowieckie", pow: ["WA (Warszawa)", "WB (Warszawa)", "WPI (Piaseczno)", "WPR (Pruszków)", "WWE (Węgrów)"] },
+    "K": { woj: "Małopolskie", pow: ["KR (Kraków)", "KRA (Kraków)", "KMY (Myślenice)", "KWI (Wieliczka)", "KTA (Tarnów)"] },
+    "S": { woj: "Śląskie", pow: ["SK (Katowice)", "SY (Bytom)", "SG (Gliwice)", "SZY (Żywiec)", "SZO (Żory)"] },
+    "D": { woj: "Dolnośląskie", pow: ["DW (Wrocław)", "DB (Wałbrzych)", "DLW (Lwówek Śl.)", "DZA (Zgorzelec)"] },
+    "P": { woj: "Wielkopolskie", pow: ["PO (Poznań)", "PZ (Poznań)", "PLN (Leszno)", "PKA (Kalisz)"] },
+    "G": { woj: "Pomorskie", pow: ["GD (Gdańsk)", "GA (Gdynia)", "GSP (Sopot)", "GWE (Wejherowo)"] },
+    "L": { woj: "Lubelskie", pow: ["LU (Lublin)", "LZ (Zamość)", "LCH (Chełm)", "LPU (Puławy)"] },
+    "B": { woj: "Podlaskie", pow: ["BI (Białystok)", "BS (Suwałki)", "BL (Łomża)", "BIA (Białystok)"] }
+};
     function generateAll() {
         const isF = Math.random() > 0.5;
         const pesel = genPESEL(isF);
@@ -175,7 +185,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         document.getElementById('g-regon9').innerText = reg.r9;
         document.getElementById('g-regon14').innerText = reg.r14;
 
-        document.getElementById('g-plate').innerText = genPlate();
+document.getElementById('g-plate').innerText = genPlate();
         document.getElementById('g-vin').innerText = genVIN();
         document.getElementById('g-license').innerText = genLicense();
         document.getElementById('g-car-id').innerText = genCarID();
@@ -1112,10 +1122,38 @@ function validateREGON(r) {
     }
 
     // --- FUNKCJE GENERATORA (PODSTAWOWE) ---
-    function genPlate() { return "WWA " + Math.random().toString(36).substring(2,7).toUpperCase(); }
+function genPlate() {
+    const keys = Object.keys(BAZA_TABLIC);
+    const randomWoj = BAZA_TABLIC[keys[Math.floor(Math.random() * keys.length)]];
+    const fullPow = randomWoj.pow[Math.floor(Math.random() * randomWoj.pow.length)];
+    const code = fullPow.split(" ")[0]; // Pobiera tylko kod np. "WPI"
+    
+    // Generowanie losowej końcówki (5 znaków: cyfry i litery)
+    const chars = "0123456789ABCDEFGHJKLMNOPRSTUXYZ";
+    let suffix = "";
+    for(let i=0; i<5; i++) suffix += chars.charAt(Math.floor(Math.random() * chars.length));
+    
+    return code + " " + suffix;
+}
     function genVIN() { return Math.random().toString(36).substring(2,12).toUpperCase() + Math.floor(100000+Math.random()*899999); }
     function genLicense() { return Math.floor(10000+Math.random()*89999)+"/"+Math.floor(10+Math.random()*89)+"/"+Math.floor(1000+Math.random()*8999); }
-    function genCarID() { return "AZ " + Math.floor(1000000+Math.random()*8999999); }
+    function genCarID() { const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    
+    // Generowanie 3 losowych liter serii
+    let series = "";
+    for (let i = 0; i < 3; i++) {
+        series += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+    
+    // Generowanie 6 losowych cyfr numeru
+    let num = "";
+    for (let i = 0; i < 6; i++) {
+        num += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }
+    
+    return series + " " + num;
+}
     function genPESEL(isF) {
         const y = 1970+Math.floor(Math.random()*45), m = 1+Math.floor(Math.random()*12)+(y>=2000?20:0), d = 1+Math.floor(Math.random()*28);
         const p = isF ? [0,2,4,6,8][Math.floor(Math.random()*5)] : [1,3,5,7,9][Math.floor(Math.random()*5)];
