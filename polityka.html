@@ -2,87 +2,129 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polityka Prywatności - Generator Tożsamości</title>
     <style>
-        :root { --primary: #10b981; --secondary: #3b82f6; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
-/* Główne tło i czcionka */
-body {
-    background: radial-gradient(circle at center, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
-    font-family: 'Segoe UI', sans-serif;
-    color: #ffffff;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-}
+        :root { 
+            --primary-color: #4ecca3; 
+            --accent-color: #45b293;
+            --text-main: #ffffff;
+            --text-muted: #e2e8f0;
+        }
 
-/* Kontener dokumentu */
-.container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 50px;
-    max-width: 850px;
-    margin: 50px 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-}
+        /* Główne tło z efektem radial-gradient */
+        body {
+            background: radial-gradient(circle at center, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-/* --- EFEKT DLA PRZYCISKU POWROTU --- */
-.back-link {
-    display: inline-block;
-    text-decoration: none;
-    color: #1a1a2e;            /* Ciemny tekst na zielonym tle */
-    background: #4ecca3;       /* Twój główny zielony kolor */
-    padding: 10px 25px;
-    border-radius: 50px;       /* Zaokrąglony kształt */
-    font-weight: bold;
-    font-size: 0.9rem;
-    transition: all 0.3s ease; /* Płynna animacja */
-    margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(78, 204, 163, 0.2);
-}
+        /* Kontener dokumentu - Efekt pływającej ramki (Glassmorphism) */
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 850px;
+            margin: 50px 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            line-height: 1.7;
+        }
 
-.back-link:hover {
-    transform: scale(1.05);    /* Delikatne powiększenie */
-    background: #45b293;       /* Ciemniejszy odcień zieleni przy najechaniu */
-    box-shadow: 0 6px 20px rgba(78, 204, 163, 0.4);
-}
+        /* Stylizacja przycisku powrotu */
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #1a1a2e;            /* Ciemny tekst na zielonym tle */
+            background: var(--primary-color);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(78, 204, 163, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.back-link:active {
-    transform: scale(0.95);    /* Efekt kliknięcia */
-}
-/* ---------------------------------- */
+        .back-link:hover {
+            transform: scale(1.05);
+            background: var(--accent-color);
+            box-shadow: 0 6px 20px rgba(78, 204, 163, 0.4);
+        }
 
-h1, h2 {
-    color: #4ecca3;
-    border-bottom: 1px solid rgba(78, 204, 163, 0.2);
-    padding-bottom: 10px;
-}
+        .back-link:active {
+            transform: scale(0.95);
+        }
 
-p {
-    line-height: 1.7;
-    color: #e2e8f0;
-}
+        /* Nagłówki */
+        h1, h2 {
+            color: var(--primary-color);
+            border-bottom: 1px solid rgba(78, 204, 163, 0.2);
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        h1 { margin-top: 0; }
+
+        p, li {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        strong {
+            color: var(--primary-color);
+        }
+
+        /* Stopka dokumentu */
+        .doc-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        /* Responsywność */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px 10px;
+            }
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
+        <a href="index.html" class="back-link">← Powrót do generatora</a>
+
         <h1>Polityka Prywatności</h1>
         <p>Niniejsza Polityka Prywatności określa zasady gromadzenia, przetwarzania i wykorzystywania informacji o użytkownikach serwisu <strong>Generator Tożsamości</strong>.</p>
         
         <h2>§1. Administrator Danych</h2>
-        <p>Administratorem danych osobowych (w zakresie analityki) jest właściciel serwisu dostępny pod adresem e-mail: [iod@technova.int.pl]. W sprawach związanych z prywatnością prosimy o kontakt elektroniczny.</p>
+        <p>Administratorem danych osobowych (w zakresie analityki) jest właściciel serwisu dostępny pod adresem e-mail: <strong>iod@technova.int.pl</strong>. W sprawach związanych z prywatnością prosimy o kontakt elektroniczny.</p>
 
         <h2>§2. Zakres zbieranych danych</h2>
         <p>Serwis zbiera dwa rodzaje informacji:</p>
         <ul>
             <li><strong>Dane techniczne (logi):</strong> Adres IP, typ przeglądarki, czas dostępu, system operacyjny. Są one wykorzystywane wyłącznie do zapewnienia stabilności serwera.</li>
-            <li><strong>Dane analityczne:</strong> Anonimowe informacje o interakcjach z generatorem (np. które numery są generowane najczęściej), zbierane za pomocą zewnętrznych narzędzi (np. Google Analytics).</li>
+            <li><strong>Dane analityczne:</strong> Anonimowe informacje o interakcjach z generatorem, zbierane za pomocą zewnętrznych narzędzi (np. Google Analytics).</li>
         </ul>
 
         <h2>§3. Cookies i Technologie Śledzące</h2>
@@ -94,8 +136,10 @@ p {
 
         <h2>§4. Bezpieczeństwo Danych</h2>
         <p>Podkreślamy z pełną mocą: <strong>żadne dane osobowe generowane przez algorytmy serwisu nie są przesyłane do naszej bazy danych.</strong> Proces generowania odbywa się w całości w Twojej przeglądarce (Client-Side JavaScript). Twoja prywatność jest chroniona technicznie u źródła.</p>
-<div class="container">
-        <a href="index.html" class="back-btn">← Powrót do generatora</a>
+
+        <div class="doc-footer">
+            © 2026 Generator Tożsamości. Wszystkie prawa zastrzeżone.
+        </div>
     </div>
 </body>
 </html>
