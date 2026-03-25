@@ -358,6 +358,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="item full" onclick="copy(this)"><span class="label">Mikrorachunek (Firma - NIP)</span><span id="g-tax-n" class="val">---</span><span class="copy-hint">KOPIUJ</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Adres IPv4</span><span id="g-ipv4" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Adres IPv6</span><span id="g-ipv6" class="val">---</span></div>
+<div class="item" onclick="copy(this)"><span class="label">Maska podsieci</span><span id="g-subnet" class="val">---</span></div>
+<div class="item" onclick="copy(this)"><span class="label">Adres sieci</span><span id="g-network" class="val">---</span></div>
+<div class="item" onclick="copy(this)"><span class="label">Adres rozgłoszeniowy (Broadcast)</span><span id="g-broadcast" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Brama sieciowa</span><span id="g-gateway" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">DNS</span><span id="g-dns" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Adres MAC</span><span id="g-mac" class="val">---</span></div>
@@ -455,18 +458,23 @@ const passport = genPassport();
 // Generowanie NPWZ
     const npwz = genNPWZ();
     document.getElementById('g-npwz').innerText = npwz;
-// Sekcja sieciowa - Aktywacja
-    const ipv4 = genIPv4();
+// 1. Wygeneruj podstawowe IP (to już masz)
+    const ipv4 = genIPv4(); 
     document.getElementById('g-ipv4').innerText = ipv4;
     document.getElementById('g-ipv6').innerText = genIPv6();
     document.getElementById('g-mac').innerText = genMAC();
-    
-    // Generowanie bramy na podstawie adresu IP
-    const gateway = ipv4.split('.').slice(0, 3).join('.') + '.1';
-    document.getElementById('g-gateway').innerText = gateway;
-    
+
+    // 2. OBLICZENIA SIECIOWE (DODAJ TO)
+    const mask = genSubnetMask(ipv4);
+    const netData = calculateNetwork(ipv4, mask);
+
+    // 3. WPISZ DANE DO NOWYCH PÓL
+    document.getElementById('g-subnet').innerText = mask;
+    document.getElementById('g-network').innerText = netData.network;
+    document.getElementById('g-broadcast').innerText = netData.broadcast;
+    document.getElementById('g-gateway').innerText = netData.gateway; // To zsynchronizuje bramę z IP
     // Losowy DNS
-    const dnsList = ["8.8.8.8", "1.1.1.1", "9.9.9.9", "208.67.222.222"];
+    const dnsList = ["8.8.8.8", "1.1.1.1", "9.9.9.9", "208.67.222.222", "8.8.4.4", "1.1.1.2", "1.1.1.3", "149.112.112.112", "208.67.220.220", "176.103.130.130", "176.103.130.131", "194.204.152.34", "194.204.159.1", "62.233.233.233", "87.204.204.204", "85.232.226.102", "77.79.235.102"];
     document.getElementById('g-dns').innerText = dnsList[Math.floor(Math.random() * dnsList.length)];document.getElementById('g-plate').innerText = genPlate();
         document.getElementById('g-vin').innerText = genVIN();
         document.getElementById('g-license').innerText = genLicense();
@@ -1674,6 +1682,28 @@ function genUA() {
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
     ];
     return agents[Math.floor(Math.random() * agents.length)];
+}
+function genSubnetMask(ip) {
+    const first = parseInt(ip.split('.')[0]);
+    if (first <= 126) return "255.0.0.0"; // Klasa A
+    if (first <= 191) return "255.255.0.0"; // Klasa B
+    return "255.255.255.0"; // Klasa C
+}
+
+function calculateNetwork(ip, mask) {
+    const ipP = ip.split('.').map(Number);
+    const maskP = mask.split('.').map(Number);
+    
+    // Bitowe AND dla adresu sieci
+    const netP = ipP.map((octet, i) => octet & maskP[i]);
+    // Bitowe OR NOT dla broadcastu
+    const broadP = ipP.map((octet, i) => octet | (255 - maskP[i]));
+    
+    return {
+        network: netP.join('.'),
+        broadcast: broadP.join('.'),
+        gateway: netP[0] + "." + netP[1] + "." + netP[2] + "." + (netP[3] + 1)
+    };
 }
     function copy(el) {
         const val = el.querySelector('.val').innerText.replace(/\s/g, '');
