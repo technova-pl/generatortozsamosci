@@ -1667,7 +1667,7 @@ function genCreditCard() {
 
 // --- GENERATOR WIFI ---
 function genWifi() {
-    const ssids = ["Wi-Fi_", "TP-Link_", "Orange_Światłowód", "Plus_Internet"];
+    const ssids = ["Wi-Fi", "TP-Link", "Orange_Światłowód", "Plus_Internet"];
     const ssid = ssids[Math.floor(Math.random() * ssids.length)] + "_" + Math.floor(Math.random() * 9999);
     const pass = Math.random().toString(36).slice(-10) + "!";
     return { ssid, pass };
