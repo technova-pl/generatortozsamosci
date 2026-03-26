@@ -310,9 +310,44 @@ h3 {
     color: var(--primary-color);
     word-break: break-all; /* To zapobiega rozjeżdżaniu się ramek przez długie IPv6 */
 }
+.cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid #334155;
+    padding: 15px 25px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #f8fafc;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.cookie-banner a { color: #3b82f6; text-decoration: none; }
+.cookie-banner button {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.cookie-banner button:hover { background: #059669;
+}
     </style>
 </head>
 <body>
+            <div id="cookie-banner" class="cookie-banner">
+    <p>Używamy plików cookies, aby zapewnić działanie generatora i analizować ruch. 
+    <a href="rodo.html">Dowiedz się więcej</a>.</p>
+    <button onclick="acceptCookies()">Akceptuję</button>
+</div>
     <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N4PLZJQM"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -371,11 +406,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="item" onclick="copy(this)"><span class="label">Hasło WiFi</span><span id="g-wifi-pass" class="val">---</span></div>
 
 <div class="item full" onclick="copy(this)"><span class="label">User-Agent (Przeglądarka)</span><span id="g-ua" class="val">---</span></div>
-        <div id="cookie-banner" class="cookie-banner">
-    <p>Używamy plików cookies, aby zapewnić działanie generatora i analizować ruch. 
-    <a href="rodo.html">Dowiedz się więcej</a>.</p>
-    <button onclick="acceptCookies()">Akceptuję</button>
-</div>
         </div>
         <button class="main-btn" onclick="generateAll()">GENERUJ KOMPLET DANYCH</button>
 
@@ -398,6 +428,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </footer>
 
 <script>
+    function acceptCookies() {
+    document.getElementById('cookie-banner').style.display = 'none';
+    localStorage.setItem('cookiesAccepted', 'true');
+}
+
+// Sprawdzenie przy ładowaniu strony
+window.onload = function() {
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+};
     // Dane do generatora
     const imionaM = ["Jan", "Andrzej", "Piotr", "Krzysztof", "Stanisław", "Tomasz", "Paweł", "Marcin", "Michał", "Adam", "Łukasz", "Robert", "Mateusz", "Rafał", "Filip", "Maksymilian", "Kacper"];
     const imionaZ = ["Anna", "Maria", "Katarzyna", "Małgorzata", "Agnieszka", "Barbara", "Ewa", "Magdalena", "Monika", "Joanna", "Beata", "Marta", "Dorota"];
