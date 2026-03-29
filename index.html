@@ -395,17 +395,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="item" onclick="copy(this)"><span class="label">Adres IPv6</span><span id="g-ipv6" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Maska podsieci</span><span id="g-subnet" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Adres sieci</span><span id="g-network" class="val">---</span></div>
-<div class="item" onclick="copy(this)"><span class="label">Adres rozgłoszeniowy (Broadcast)</span><span id="g-broadcast" class="val">---</span></div>
+<div class="item" onclick="copy(this)"><span class="label">Broadcast</span><span id="g-broadcast" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Brama sieciowa</span><span id="g-gateway" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">DNS</span><span id="g-dns" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Adres MAC</span><span id="g-mac" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Karta płatnicza</span><span id="g-card" class="val">---</span></div>
-<div class="item" onclick="copy(this)"><span class="label">Data ważności / CVV</span><span id="g-card-extra" class="val">---</span></div>
-
+<div class="item" onclick="copy(this)"><span class="label">Data / CVV</span><span id="g-card-extra" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Sieć WiFi (SSID)</span><span id="g-wifi-ssid" class="val">---</span></div>
 <div class="item" onclick="copy(this)"><span class="label">Hasło WiFi</span><span id="g-wifi-pass" class="val">---</span></div>
-
-<div class="item full" onclick="copy(this)"><span class="label">User-Agent (Przeglądarka)</span><span id="g-ua" class="val">---</span></div>
+<div class="item full" onclick="copy(this)"><span class="label">User-Agent</span><span id="g-ua" class="val">---</span></div>
         </div>
         <button class="main-btn" onclick="generateAll()">GENERUJ KOMPLET DANYCH</button>
 
@@ -526,11 +524,10 @@ const passport = genPassport();
         document.getElementById('g-license').innerText = genLicense();
         document.getElementById('g-car-id').innerText = genCarID();
 // --- GENEROWANIE KARTY ---
+// Generowanie karty (z poprawionym algorytmem Luhna)
     const card = genCreditCard();
-    // match(/.{1,4}/g) dodaje spacje co 4 cyfry dla czytelności
     document.getElementById('g-card').innerText = `${card.brand}: ${card.num.match(/.{1,4}/g).join(' ')}`;
     document.getElementById('g-card-extra').innerText = `EXP: ${card.exp} | CVV: ${card.cvv}`;
-
     // --- GENEROWANIE WIFI ---
     const wifi = genWifi();
     document.getElementById('g-wifi-ssid').innerText = wifi.ssid;
@@ -1701,16 +1698,51 @@ function genDNS() {
 // --- GENERATOR KARTY ---
 function genCreditCard() {
     const brand = Math.random() > 0.5 ? 'Visa' : 'Mastercard';
-    let num = brand === 'Visa' ? '4' : '5' + (Math.floor(Math.random() * 5) + 1);
-    while (num.length < 16) num += Math.floor(Math.random() * 10);
-    
-    const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
-    const year = new Date().getFullYear() + Math.floor(Math.random() * 5) + 1;
-    const cvv = Math.floor(Math.random() * 899 + 100);
-    
-    return { num, exp: `${month}/${String(year).slice(-2)}`, cvv, brand };
-}
+    let digits = [];
 
+    // 1. Ustalenie początkowych cyfr (BIN)
+    if (brand === 'Visa') {
+        digits.push(4); // Visa zawsze zaczyna się od 4
+    } else {
+        // Mastercard: najczęściej 51, 52, 53, 54 lub 55
+        digits.push(5);
+        digits.push(Math.floor(Math.random() * 5) + 1);
+    }
+
+    // 2. Losowanie kolejnych cyfr aż do 15. pozycji
+    while (digits.length < 15) {
+        digits.push(Math.floor(Math.random() * 10));
+    }
+
+    // 3. IMPLEMENTACJA ALGORYTMU LUHNA (obliczanie 16. cyfry kontrolnej)
+    let sum = 0;
+    for (let i = 0; i < digits.length; i++) {
+        let digit = digits[i];
+        
+        // Dla numeru 16-cyfrowego, mnożymy przez 2 cyfry na parzystych indeksach (0, 2, 4...)
+        if (i % 2 === 0) {
+            digit *= 2;
+            if (digit > 9) digit -= 9; // Jeśli wynik > 9, odejmujemy 9 (suma cyfr)
+        }
+        sum += digit;
+    }
+
+    // Cyfra kontrolna to dopełnienie sumy do najbliższej dziesiątki
+    let checkDigit = (10 - (sum % 10)) % 10;
+    digits.push(checkDigit);
+
+    // 4. Generowanie daty ważności i kodu CVV
+    const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+    const year = new Date().getFullYear() + Math.floor(Math.random() * 5) + 1; // Ważna 1-5 lat
+    const cvv = Math.floor(Math.random() * 899 + 100);
+
+    return { 
+        num: digits.join(''), 
+        exp: `${month}/${String(year).slice(-2)}`, 
+        cvv: cvv, 
+        brand: brand 
+    };
+}
 // --- GENERATOR WIFI ---
 function genWifi() {
     const ssids = ["Wi-Fi", "TP-Link", "Orange_Światłowód", "Plus_Internet"];
